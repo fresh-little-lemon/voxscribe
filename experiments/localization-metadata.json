@@ -1,0 +1,37 @@
+{
+  "clip_seconds": 75,
+  "asr_model": "Qwen/Qwen3-ASR-0.6B-hf",
+  "asr_revision": "7f1569a48a89f3e3f4dc3a5c9d28bddd903bc76c",
+  "cpu_threads": 2,
+  "asr_25_second_windows_inference_seconds": [
+    8.016,
+    11.272,
+    7.333
+  ],
+  "input": "Untimed corrected source-language paragraph; translation retained as annotation only",
+  "first_coarse_candidate_seconds": [
+    50,
+    75
+  ],
+  "naive_alignment_failure": "Directly aligning only the edited sentence in a broad chunk pulled its first word to 49.58s; a word spanned 11.28s. Result requires review.",
+  "refined_candidate_seconds": [
+    59.5,
+    74.94
+  ],
+  "refined_first_last_word_seconds": [
+    59.48,
+    74.92
+  ],
+  "refined_inference_seconds": 2.4147653550007817,
+  "verification": "Not human verified; one zero-duration word remains. No accuracy claim.",
+  "transcribe_endpoint_smoke": {
+    "range_seconds": [
+      50,
+      75
+    ],
+    "status": 200,
+    "word_anchors": 31,
+    "total_seconds": 27.107
+  },
+  "privacy": "No audio, transcript, or complete word output published."
+}

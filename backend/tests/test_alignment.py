@@ -34,3 +34,7 @@ def test_ffmpeg_rejects_playlist(tmp_path):
     playlist.write_text('#EXTM3U\n#EXTINF:1,\nhttp://127.0.0.1:9/no.wav\n')
     with pytest.raises(ValueError,match='decode failed'):
         decode_window(playlist,0,1)
+
+def test_implausibly_long_word_warns():
+    from backend.alignment import boundary_warnings
+    assert any('two seconds' in s for s in boundary_warnings([{'text':'happens','start':0,'end':11.28}],0,15))

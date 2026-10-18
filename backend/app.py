@@ -131,3 +131,68 @@ async def align(file: Annotated[UploadFile,File()], transcript: Annotated[str,Fo
             logging.getLogger(__name__).exception('Local forced alignment failed')
             raise HTTPException(503,f'Alignment unavailable ({type(exc).__name__}). Check local server model/dependency logs.')
     return {'revision':req.revision,'segments':segments,'method':'Qwen3-ForcedAligner-0.6B-hf','modelRevision':MODEL_REVISION,'warnings':[WARNING]}
+
+# Coarse matching endpoint; deliberately separate from acoustic alignment.
+from .localization import localize
+class Paragraph(BaseModel):
+    id: str = Field(min_length=1,max_length=200)
+    text: str = Field(min_length=1,max_length=16000)
+    annotation: str = Field(default='',max_length=16000)
+class CoarseSegment(BaseModel):
+    text: str = Field(min_length=1,max_length=32000)
+    start: float = Field(ge=0,allow_inf_nan=False)
+    end: float = Field(gt=0,allow_inf_nan=False)
+    @model_validator(mode='after')
+    def bounds(self):
+        if self.end<=self.start: raise ValueError('Coarse end must exceed start')
+        return self
+class LocalizationRequest(BaseModel):
+    revision: str = Field(default='',max_length=200)
+    paragraphs: list[Paragraph] = Field(min_length=1,max_length=200)
+    coarseSegments: list[CoarseSegment] = Field(default_factory=list,max_length=10000)
+    language: str = 'English'
+    @model_validator(mode='after')
+    def validate_source(self):
+        if sum(len(s.text) for s in self.coarseSegments)>500000:
+            raise ValueError('Coarse transcript exceeds 500000 characters')
+        if len({p.id for p in self.paragraphs})!=len(self.paragraphs):
+            raise ValueError('Paragraph IDs must be unique')
+        if any(b.start<a.start for a,b in zip(self.coarseSegments,self.coarseSegments[1:])):
+            raise ValueError('Coarse segments must be ordered by start')
+        return self
+
+@app.post('/api/localize')
+async def localize_transcript(request:LocalizationRequest):
+    result=await run_in_threadpool(localize,[p.model_dump() for p in request.paragraphs],[s.model_dump() for s in request.coarseSegments])
+    return {**result,'revision':request.revision,'method':'coarse-text-candidate-matching'}
+
+class TranscriptionOptions(BaseModel):
+    start: float = Field(default=0,ge=0,allow_inf_nan=False)
+    end: float = Field(gt=0,allow_inf_nan=False)
+    language: str = 'English'
+    @model_validator(mode='after')
+    def short_window(self):
+        if not 0<self.end-self.start<=120:raise ValueError('Select a range of at most 120 seconds')
+        if self.language not in {'English','Chinese'}:raise ValueError('Short-clip MVP supports English or Chinese')
+        return self
+
+@app.post('/api/transcribe')
+async def transcribe(file:Annotated[UploadFile,File()],options:Annotated[str,Form()]):
+    if os.getenv('VOXSCRIBE_ENABLE_ASR','0')!='1':
+        raise HTTPException(503,'Local short-clip ASR is disabled. Set VOXSCRIBE_ENABLE_ASR=1 on the server; official model weights may download. Whole-recording transcription is not implemented.')
+    try:req=TranscriptionOptions.model_validate_json(options)
+    except ValueError as exc:raise HTTPException(422,str(exc))
+    with tempfile.TemporaryDirectory(prefix='voxscribe-asr-') as tmp:
+        path=Path(tmp)/'audio.media';size=0
+        with path.open('wb') as target:
+            while chunk:=await file.read(1024*1024):
+                size+=len(chunk)
+                if size>512*1024*1024:raise HTTPException(413,'Audio must be <=512 MiB')
+                target.write(chunk)
+        if not size:raise HTTPException(422,'Empty audio file')
+        from .transcription import transcribe_window
+        try:return await run_in_threadpool(transcribe_window,path,req.start,req.end,req.language,aligner)
+        except ValueError as exc:raise HTTPException(422,str(exc))
+        except Exception as exc:
+            logging.getLogger(__name__).exception('Local short-clip ASR failed')
+            raise HTTPException(503,f'Local ASR unavailable ({type(exc).__name__}); check server model/dependency logs.')

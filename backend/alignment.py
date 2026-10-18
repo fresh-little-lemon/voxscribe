@@ -35,6 +35,8 @@ def boundary_warnings(words, start, end):
             warnings.append('Model emitted an out-of-bounds or inverted timestamp; review required')
         if w['start'] < previous - .08:
             warnings.append('Model emitted nonmonotonic timestamps; review required')
+        if w['end'] - w['start'] > 2.0:
+            warnings.append('One or more words span over two seconds; broad or mismatched anchors may be responsible')
         if w['end'] - w['start'] < .02:
             warnings.append('One or more words have near-zero duration; text/audio mismatch is possible')
         previous = w['start']
@@ -77,3 +79,17 @@ class Aligner:
                 warnings = boundary_warnings(words, start, start+len(audio)/16000)
                 results.append({**s, 'words': words, 'textHash': text_hash(s['text']), 'alignmentStatus': 'review' if warnings else 'aligned', 'verified': False, 'warnings': warnings, 'inferenceSeconds': elapsed})
         return results
+
+
+def refine_coarse_anchors(path, coarse_segments, aligner):
+    """Align whole ASR windows before locating an edited subparagraph.
+
+    Passing just the edited phrase against a wide window can pull it onto earlier
+    unrelated speech. This stage supplies the full recognized context instead.
+    """
+    words=[];warnings=[]
+    for i,s in enumerate(coarse_segments):
+        result=aligner.align_segments(path,[{'id':f'coarse-{i}','text':s['text'],'start':s['start'],'end':s['end'],'speaker':''}])[0]
+        words.extend(w for w in result['words'] if w['end']>w['start'])
+        warnings.extend(result['warnings'])
+    return sorted(words,key=lambda w:(w['start'],w['end'])),list(dict.fromkeys(warnings))
