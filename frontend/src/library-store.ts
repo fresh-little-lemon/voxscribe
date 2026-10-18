@@ -3,7 +3,7 @@ import type { Segment } from './demo';
 export type ImportVersion={name:string;raw:string;version:number;mode:'all'|'english'|'chinese'};
 export type SavedDocument={segments:Segment[];importVersions:ImportVersion[];language:string;method:string;mediaIdentity?:string;incremental?:Record<string,{base:Segment;plan:EditPlan}>};
 export type LibraryFolder={id:string;name:string;parentId:string|null};
-export type LibraryItem={id:string;name:string;kind:'audio'|'video'|'document'|'demo';folderId:string|null;createdAt:string;updatedAt:string;deletedAt?:string;mediaStored?:boolean;mediaName?:string;document?:SavedDocument};
+export type LibraryItem={id:string;name:string;kind:'audio'|'video'|'document'|'demo';folderId:string|null;createdAt:string;updatedAt:string;deletedAt?:string;privateDemo?:boolean;mediaStored?:boolean;mediaName?:string;document?:SavedDocument};
 export type LibraryData={version:1;folders:LibraryFolder[];items:LibraryItem[]};
 export const STORAGE_KEY='voxscribe-library-v1';
 export const initialLibrary=():LibraryData=>({version:1,folders:[{id:'courses',name:'课程学习',parentId:null},{id:'meetings',name:'会议记录',parentId:null}],items:[{id:'welcome-demo',name:'VoxScribe 使用指南（演示）',kind:'demo',folderId:null,createdAt:'2026-10-18T00:00:00Z',updatedAt:'2026-10-18T00:00:00Z'}]});
