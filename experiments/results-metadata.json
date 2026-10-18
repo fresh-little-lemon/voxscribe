@@ -1,0 +1,48 @@
+{
+  "model": "Qwen/Qwen3-ForcedAligner-0.6B-hf",
+  "revision": "c07281df297b9905d24a508279258cccf987a064",
+  "audio_seconds": 75,
+  "model_load_seconds": 12.812,
+  "device": "CPU",
+  "threads": 2,
+  "dtype": "bfloat16",
+  "torch": "2.14.1+cpu",
+  "transformers": "5.20.1",
+  "cases": [
+    {
+      "case": "before",
+      "inference_seconds": 8.907,
+      "word_count": 100,
+      "zero_duration_words": 2,
+      "in_bounds": true,
+      "monotonic_starts": true
+    },
+    {
+      "case": "restored",
+      "inference_seconds": 10.344,
+      "word_count": 124,
+      "zero_duration_words": 3,
+      "in_bounds": true,
+      "monotonic_starts": true
+    },
+    {
+      "case": "unspoken",
+      "inference_seconds": 10.662,
+      "word_count": 134,
+      "zero_duration_words": 14,
+      "in_bounds": true,
+      "monotonic_starts": true
+    }
+  ],
+  "accuracy": "Not measured: no manually labeled word-boundary ground truth",
+  "negative_test": "Unspoken inserted sentence received timestamps; six of its ten words had zero duration. Alignment does not prove speech occurred.",
+  "privacy": "Audio, transcript, and word-level outputs kept private; not bundled.",
+  "api_smoke": {
+    "transport": "FastAPI TestClient multipart, actual model inference",
+    "status": 200,
+    "word_count": 124,
+    "total_seconds_including_model_load": 19.35,
+    "revision_echo_verified": true
+  },
+  "waveform_check": "Visual RMS spot-check at restored onset and a salient word onset was plausible; not a human listening ground truth."
+}
