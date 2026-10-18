@@ -1,9 +1,9 @@
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
-import {mapTranscriptDisplay} from './transcript-display';
+import {mapTranscriptDisplay,type TranscriptDisplay} from './transcript-display';
 import {clock,type Word} from './demo';
 import {HighlightSpring,transferDuration,transferKind,type HighlightRect} from './highlight-motion';
-export default function AnimatedTranscript({text,words,activeIndex,seekRevision,query,onSeek}:{text?:string;words:Word[];activeIndex:number;seekRevision:number;query:string;onSeek:(time:number)=>void}){
- const display=useMemo(()=>mapTranscriptDisplay(text??words.map(w=>w.text).join(' '),words),[text,words]);
+export default function AnimatedTranscript({text,words,activeIndex,seekRevision,query,onSeek,pendingDisplay}:{pendingDisplay?:TranscriptDisplay;text?:string;words:Word[];activeIndex:number;seekRevision:number;query:string;onSeek:(time:number)=>void}){
+ const display=useMemo(()=>pendingDisplay||mapTranscriptDisplay(text??words.map(w=>w.text).join(' '),words),[text,words,pendingDisplay]);
  const root=useRef<HTMLDivElement>(null);const pill=useRef<HTMLSpanElement>(null);const ink=useRef<HTMLParagraphElement>(null);const spring=useRef<HighlightSpring|null>(null);const previous=useRef<{index:number;seek:number;rect:HighlightRect}|null>(null);const frame=useRef(0);const lastFrame=useRef(0);const opacity=useRef(1);const reduced=useRef(false);const update=useRef<(snap?:boolean)=>void>(()=>{});
  function draw(rect:HighlightRect){if(!root.current||!pill.current||!ink.current)return;const width=root.current.clientWidth;const height=root.current.clientHeight;pill.current.style.transform=`translate3d(${rect.x}px,${rect.y}px,0)`;pill.current.style.width=`${rect.width}px`;pill.current.style.height=`${rect.height}px`;pill.current.style.opacity=String(opacity.current);ink.current.style.clipPath=`inset(${rect.y}px ${Math.max(0,width-rect.x-rect.width)}px ${Math.max(0,height-rect.y-rect.height)}px ${rect.x}px round 4px)`;ink.current.style.opacity=String(opacity.current)}
  function tick(timestamp:number){const dt=lastFrame.current?Math.max(0,(timestamp-lastFrame.current)/1000):1/60;lastFrame.current=timestamp;if(!spring.current)return;opacity.current=Math.min(1,opacity.current+dt/0.075);draw(spring.current.step(dt));if(!spring.current.settled||opacity.current<1)frame.current=requestAnimationFrame(tick);else frame.current=0}

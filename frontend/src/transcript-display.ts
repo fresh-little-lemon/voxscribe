@@ -14,3 +14,18 @@ export function mapTranscriptDisplay(text:string,words:Word[]):TranscriptDisplay
  ranges.forEach((range,index)=>{const next=ranges[index+1]?.start??text.length;const following=text.slice(range.end,next);const punctuation=following.match(/^\S*/u)?.[0]||'';const end=range.end+punctuation.length;tokens.push({wordIndex:range.wordIndex,before:text.slice(consumed,range.start),text:text.slice(range.start,end)});consumed=end});
  return {matched:true,tokens,tail:text.slice(consumed)};
 }
+
+/** Pending edits have no invented timing: only exact unchanged source spans get word buttons. */
+export function mapPendingTranscriptDisplay(text:string,words:Word[],jobs:{replaceFrom:number;replaceTo:number;changedCharacters:number}[]):TranscriptDisplay{
+ const source:{start:number;end:number}[]=[];let offset=0;
+ for(const char of text){for(const _ of canonical(char))source.push({start:offset,end:offset+char.length});offset+=char.length}
+ const labels=words.map(w=>canonical(w.text));const ranges:{wordIndex:number;start:number;end:number}[]=[];let position=0,index=0;
+ for(const job of [...jobs].sort((a,b)=>a.replaceFrom-b.replaceFrom)){
+  while(index<job.replaceFrom){const label=labels[index];const start=source[position]?.start,end=source[position+label.length-1]?.end;if(!label||start===undefined||end===undefined||canonical(text.slice(start,end))!==label)return {matched:false,tokens:[],tail:text};ranges.push({wordIndex:index,start,end});position+=label.length;index++}
+  position+=job.changedCharacters;index=job.replaceTo;
+ }
+ while(index<words.length){const label=labels[index];const start=source[position]?.start,end=source[position+label.length-1]?.end;if(!label||start===undefined||end===undefined||canonical(text.slice(start,end))!==label)return {matched:false,tokens:[],tail:text};ranges.push({wordIndex:index,start,end});position+=label.length;index++}
+ if(position!==source.length)return {matched:false,tokens:[],tail:text};
+ let consumed=0;const tokens=ranges.map((range,i)=>{const next=ranges[i+1]?.start??text.length;const punctuation=text.slice(range.end,next).match(/^[^\p{L}\p{N}\s]*/u)?.[0]||'';const end=range.end+punctuation.length;const token={wordIndex:range.wordIndex,before:text.slice(consumed,range.start),text:text.slice(range.start,end)};consumed=end;return token});
+ return {matched:true,tokens,tail:text.slice(consumed)};
+}
