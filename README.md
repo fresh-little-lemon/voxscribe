@@ -13,7 +13,7 @@ VoxScribe combines a media player, speaker-aware transcript and correction workf
 - Real local forced alignment using the official Qwen3-ForcedAligner model
 - Version-aware updates so an old alignment result cannot overwrite a newer edit
 
-Implementation and real-recording validation are in progress. Test results and reproducible commands are recorded with the implementation; screenshots alone do not establish alignment accuracy.
+The first UI and local alignment service are implemented. The frontend builds successfully; backend tests and a real 75-second recording experiment pass the documented checks. Browser visual QA and end-to-end browser/API operation remain to be verified. See `frontend/README.md`, `backend/README.md`, and `experiments/README.md` for exact supported behavior and measurements. Automatic transcription and speaker diarization are subsequent integrations, not functions of this first alignment prototype.
 
 ## Repository layout
 
@@ -26,6 +26,6 @@ Original recordings, model weights, tokens, local caches and uploaded files are 
 
 ## Alignment semantics
 
-A corrected transcript of words actually spoken can be aligned to its source audio. Notes, translations and paraphrases use separate annotations or segment associations. Words without reliable matches remain visibly unaligned rather than receiving fabricated timestamps.
+A corrected transcript of words actually spoken can be aligned to its source audio. Notes, translations and paraphrases use separate annotations or segment associations. Current model timestamps remain unverified until reviewed. Suspicious boundaries receive warnings; unsupported text can still receive timestamps, as demonstrated by the negative test. Reliable rejection of every unspoken insertion is not yet implemented.
 
 Audio and video use the original media timeline. Silence is preserved, segment-relative times are converted back to absolute times, and video playback is the time source in video mode.

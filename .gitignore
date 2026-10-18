@@ -18,3 +18,6 @@ private_data/
 *.mp4
 *.webm
 *.safetensors
+
+*.tsbuildinfo
+.model-cache/
