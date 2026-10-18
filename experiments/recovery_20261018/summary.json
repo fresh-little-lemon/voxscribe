@@ -1,0 +1,27 @@
+{
+  "source_commit": "6de416c4dadb236256a2709007c30f0600e4ba07",
+  "source_changes": false,
+  "frontend_test_files_passed": 14,
+  "frontend_tests_passed": 119,
+  "backend_contract_tests_passed": 26,
+  "production_build_passed": true,
+  "real_model_inference_rerun": false,
+  "private_audio_restored": false,
+  "online_backend_deployed": false,
+  "node": "v24.19.0",
+  "python_test_environment": "Python 3.12.14",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "frontend_lock_sha256": "d670107d9498357ef8667cfc8c8d0858fd321596174314077a8f9d9baaa452e6",
+  "dependency_audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 1,
+    "high": 0,
+    "critical": 2,
+    "total": 3
+  },
+  "warnings": [
+    "FastAPI/Starlette TestClient deprecation for httpx; tests passed",
+    "Backend test environment only; transformers, torch, model weights and real-audio inference not restored"
+  ]
+}
