@@ -1,5 +1,5 @@
 export type Word = {text:string;start:number;end:number};
-export type Segment = {id:string;speaker:string;text:string;start:number;end:number;words:Word[];stale?:boolean};
+export type Segment = {id:string;speaker:string;text:string;start:number|null;end:number|null;words:Word[];stale?:boolean;annotation?:string;alignmentStatus?:string;languageReviewRequired?:boolean};
 const content = [
 [1,44,"Welcome to the VoxScribe workspace. Today we are exploring how a transcript can stay connected to the original recording. Each word on this page is part of a clearly labeled demonstration. Import your own audio or video, add the matching transcript, and run alignment to create real timestamps. You can then listen closely, move between paragraphs, and review the words in context. Good notes begin with a careful listening experience."],
 [44,64,"Let's start with a simple example."],
@@ -9,4 +9,4 @@ const content = [
 [200,264,"When you are ready, export the transcript together with its timestamps for later review. Keep the original recording, the edited text, and the alignment result together so that changes remain easy to understand."]
 ] as const;
 export const demoSegments:Segment[] = content.map(([start,end,text],i)=>{const tokens=text.split(' ');return {id:String(i+1),speaker:'说话人 1',start,end,text,words:tokens.map((text,j)=>({text,start:start+j*(end-start)/tokens.length,end:start+(j+1)*(end-start)/tokens.length}))}});
-export function clock(t:number){if(!Number.isFinite(t))return '00:00';return `${Math.floor(t/60).toString().padStart(2,'0')}:${Math.floor(t%60).toString().padStart(2,'0')}`;}
+export function clock(t:number|null){if(t===null)return '未定位';if(!Number.isFinite(t))return '00:00';return `${Math.floor(t/60).toString().padStart(2,'0')}:${Math.floor(t%60).toString().padStart(2,'0')}`;}
