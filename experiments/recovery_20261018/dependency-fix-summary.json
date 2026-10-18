@@ -1,0 +1,30 @@
+{
+  "base_source_commit": "6de416c4dadb236256a2709007c30f0600e4ba07",
+  "change": "vitest devDependency ^3.2.7 -> exact4.1.11 with regenerated lockfile",
+  "product_source_changed": false,
+  "lockfile_clean_install_passed": true,
+  "frontend_tests": 119,
+  "frontend_test_files": 14,
+  "production_build_passed": true,
+  "backend_contract_tests": 26,
+  "before_audit": {
+    "critical": 2,
+    "moderate": 1
+  },
+  "after_audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "frontend_lock_sha256": "d03fe6a055aebedc0bf291693d1c7607d2b218298b26aaf9fdd2e9c384e2aa2d",
+  "real_model_rerun": false,
+  "references": [
+    "https://github.com/advisories/GHSA-82fw-gwwq-j7x9",
+    "https://github.com/advisories/GHSA-5gmw-xhrv-c9v3",
+    "https://github.com/advisories/GHSA-85c8-ppgw-ccpr"
+  ],
+  "scope": "npm reported advisory counts at run time, not proof of absence of all security defects"
+}
