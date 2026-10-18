@@ -65,3 +65,23 @@ all 122 surviving timestamp pairs and word objects remained exactly identical.
 Public numerical results are in `experiments/incremental-metrics.json`; audio,
 transcript text, request bodies, and full responses remain private. These checks
 establish scoping and timestamp preservation, not transcript correctness.
+
+### Edit-to-API-to-timeline integration check
+
+A further private smoke check used the production TypeScript incremental planner,
+then the actual cached model through FastAPI, then the production splice and
+revision-history functions. A deliberately misspelled word was corrected in a
+1.74-second window: one returned word was applied, all 19 unchanged word objects
+were preserved exactly, and undo/redo restored the exact real timing arrays.
+Punctuation and unambiguous complete-word deletions still generated zero model
+jobs, and obsolete revision results were rejected. Cold elapsed time was 7.55 s.
+
+A separate correction demonstrates a real limitation: the model returned HTTP
+200, but its corrected word extended 10 ms beyond an unchanged neighboring
+anchor. The client rejected the splice; expanding context to five words inside
+the same sentence did not fix this instance. No timings were clamped and no
+unmodified anchor was moved. The UI now distinguishes this unapplied result from
+an unavailable backend and asks for listening review of the edit and adjacent
+words. These checks are local API/function integration, not a deployed backend
+or a browser-to-server test. Sanitized measurements are in
+`experiments/edit-integration-metrics.json`.

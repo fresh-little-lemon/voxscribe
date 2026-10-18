@@ -87,16 +87,18 @@ export default function App({onResetDemo,documentId,initialDocument,initialFile,
   if(jobs.length>12){setNotice('本轮最多对齐 12 个局部范围，请分批编辑。');return}
   if(jobs.some(s=>s.start===null||s.end===null)){setNotice('needs_localization：部分段落尚无定位范围。请先提供粗转写时间轴或手动设置开始/结束时间；不会按字数生成时间。');return}
   if(jobs.some(s=>s.start===null||s.end===null||s.end<=s.start||s.end-s.start>120)){setNotice('请在编辑段落中设置有效的开始/结束时间，每段最长 120 秒。');return}
+  let receivedAlignment=false;
   const requestedRevision=String(revision.current);setBusy(true);setNotice('正在进行真实局部音频与文字对齐，这可能需要几分钟…');
   try{
    const form=new FormData();form.append('file',file);form.append('transcript',JSON.stringify({revision:requestedRevision,language,segments:jobs}));
    const res=await fetch('/api/align',{method:'POST',body:form});if(!res.ok){let detail='';try{const body=await res.json();detail=typeof body.detail==='string'?body.detail:body.error||''}catch{}throw new Error(detail||`后端返回 ${res.status}`)}
    const data=await res.json();if(!Array.isArray(data.segments)||!data.segments.length||!data.segments.every((s:Segment)=>Array.isArray(s.words)&&s.words.every(w=>typeof w.text==='string'&&Number.isFinite(w.start)&&Number.isFinite(w.end)&&w.end>=w.start)))throw new Error('后端未返回有效的逐词时间戳');
+   receivedAlignment=true;
    if(String(data.revision)!==requestedRevision||String(revision.current)!==requestedRevision)throw new Error('文字已变化，请重新发起对齐');
    const replacements=new Map(targets.map(s=>{const plan=plans[s.id];if(plan)return [s.id,{...s,words:applyIncrementalAlignment(plan,data.segments,{audioRevision:mediaIdentity,textRevision:String(revision.current)},s.text),stale:false}];const aligned=data.segments.find((x:Segment)=>x.id===s.id);if(!aligned)throw Error('缺少请求段落的时间轴');return [s.id,{...s,...aligned,text:s.text,stale:false}]}));
    setSegments(previous=>previous.map(s=>replacements.get(s.id)||s));setIncremental(prev=>Object.fromEntries(Object.entries(prev).filter(([id])=>!replacements.has(id))));
    setMethod(data.segments.some((s:{alignmentStatus?:string})=>s.alignmentStatus==='review')?'对齐异常 · 需听审':'已对齐 · 待听审');setNotice(`对齐完成 · ${data.method||'音频强制对齐'}${data.warnings?.length?' · '+data.warnings.join('；'):''}`);
-  }catch(e){setNotice(`对齐未完成：${e instanceof Error?e.message:'后端不可用'}。请确认本地对齐服务已启动；原稿与已有时间戳已保留。`)}finally{setBusy(false)}
+  }catch(e){const reason=e instanceof Error?e.message:'后端不可用';setNotice(receivedAlignment?`对齐结果未应用：${reason}。修改文字和未修改词的时间戳已保留；请听审修改位置及相邻词，检查局部时间范围后重试，或撤销本次修改。`:`对齐未完成：${reason}。请确认本地对齐服务已启动；原稿与已有时间戳已保留。`)}finally{setBusy(false)}
  }
  function download(){const blob=new Blob([JSON.stringify({title:file?.name||'VoxScribe · 产品体验记录（演示）',demo:!file&&importVersions.length===0,method,segments,importVersions,incremental,mediaIdentity},null,2)],{type:'application/json'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='voxscribe-transcript.json';a.click();URL.revokeObjectURL(u);setMenu(false)}
  function validPlan(s:Segment){const entry=incremental[s.id];return !!entry&&entry.plan.text===s.text&&entry.plan.revision.audioRevision===mediaIdentity&&JSON.stringify(entry.plan.words)===JSON.stringify(s.words)&&JSON.stringify(entry.base.words)===JSON.stringify(entry.plan.words)}

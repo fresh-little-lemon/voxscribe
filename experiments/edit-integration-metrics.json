@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-18",
+  "method": "real cached Qwen3-ForcedAligner-0.6B-hf through FastAPI TestClient, applied by bundled production TypeScript edit planner",
+  "modelRevision": "c07281df297b9905d24a508279258cccf987a064",
+  "networkModelDownloads": false,
+  "cpuThreads": 2,
+  "successfulCorrection": {
+    "httpStatus": 200,
+    "windowSeconds": 1.74,
+    "totalSecondsIncludingColdLoad": 7.548,
+    "modelLoadSeconds": 1.277,
+    "returnedContextWords": 2,
+    "changedWordsApplied": 1,
+    "unchangedWordObjectsExactlyPreserved": 19,
+    "staleRevisionRejected": true,
+    "wholeWordDeletionModelCalls": 0,
+    "punctuationEditModelCalls": 0,
+    "revisionHistoryUndoRedoExact": true,
+    "verifiedSpeech": false
+  },
+  "rejectedCorrection": {
+    "httpStatus": 200,
+    "windowSeconds": 1.18,
+    "unchangedAnchorOverflowSeconds": 0.01,
+    "resultApplied": false,
+    "sameSentenceContextExpansionWords": 5,
+    "expandedWindowSeconds": 1.58,
+    "expandedResultApplied": false,
+    "timestampsClamped": false
+  },
+  "limitations": [
+    "Local API integration, not a deployed backend or browser-to-server end-to-end run",
+    "Correction baseline deliberately contains one misspelled word with the prior real-model word timing retained",
+    "Forced alignment does not verify that transcript words were spoken",
+    "Tightly adjacent unchanged anchors can reject genuine model output; wider context did not resolve the measured case",
+    "Private audio, transcript, request and response bodies are not included"
+  ]
+}
