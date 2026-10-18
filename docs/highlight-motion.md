@@ -1,23 +1,32 @@
-# Continuous word-highlight motion
+# Continuous word highlight and original punctuation
 
-## Design reference
+## References and approach
 
-Motion's [shared layout animations](https://motion.dev/docs/react-layout-animations) connect changing selected elements with a common `layoutId`; its documentation notes inline-element transform limitations and potential child distortion during scale-based layout animation. [useSpring](https://motion.dev/docs/react-use-spring) provides a spring following a changing target, and [useReducedMotion](https://motion.dev/docs/react-use-reduced-motion) supports adapting movement to accessibility preferences.
+Motion's [shared layout animations](https://motion.dev/docs/react-layout-animations) connect changing selected elements with a shared identity; its documentation describes inline-transform limitations and potential child scaling. [useSpring](https://motion.dev/docs/react-use-spring) follows changing targets, and [useReducedMotion](https://motion.dev/docs/react-use-reduced-motion) supports accessibility preferences.
 
-VoxScribe uses a small equivalent specialized to transcript words, rather than adding a general animation dependency. It moves one background pill inside each active paragraph and does not scale text or change word geometry.
+VoxScribe implements a lightweight shared background pill without a general animation dependency. Based on user feedback, the latest motion uses a finite, monotone ease-out rather than a long-running spring. It keeps a natural transfer but lands decisively on each word.
 
-## Behavior
+## Transfer timing
 
-- Same-line neighboring words: translate left or right and change width with a near-critically damped spring (stiffness 1000, damping 56, unit mass; tested positional overshoot below 1%)
-- New target while moving: replace the target immediately while retaining current position and velocity; there is no animation queue
-- Adjacent words on different lines: reposition to the new line, with a brief 75ms reveal; never sweep diagonally across intervening text
-- Explicit seeking, distant word jumps, resize, or reduced-motion preference: position immediately at the current word
-- Background-tab delays: bounded integration steps prevent a large elapsed interval from destabilizing the spring
-- Text: original text stays stationary and selectable. A non-interactive, accessibility-hidden identical text layer reveals white ink only inside the moving blue pill; the next word never becomes white before the background arrives
-- Input: editing replaces the display with the existing uncontrolled inline editor, preserving its IME/caret protections
+- Maximum transfer: 90 milliseconds
+- For short words: at most 45% of the word duration, with a 12ms practical minimum
+- A fresh 90ms transfer reaches 90% of its distance at approximately 48ms and lands exactly at 90ms in the numerical test
+- For an 80ms word, the transfer ends at 36ms, leaving the remaining word interval visually stationary
+- Position and width use a monotone cubic Hermite curve; there is no overshoot
+- Interrupted transfers start from the current visual position, replacing the target immediately. Forward velocity is carried where it preserves monotonicity; no queued old-word animations
+- Rendering is frame-quantized: the exact endpoint is painted on the first animation frame at or after its deadline
+- Same-line neighbors slide left/right; adjacent line changes reveal in place for 75ms. Explicit seeking, distant jumps, resizing, or reduced motion snap directly
 
-Only the visual rectangle is animated. Media time, word boundaries, click targets, and exported timestamps are unchanged. Keyboard focus indicators remain available.
+Text is never scaled or translated. A non-interactive, accessibility-hidden copy with identical typography reveals white ink only inside the moving blue background. Keyboard focus indicators remain available. Editing retains the existing uncontrolled inline editor and IME protections.
+
+## Preserve punctuation from the source
+
+The API's `segment.text` is the original/corrected transcript, including punctuation. Model `words` may omit punctuation. Previously, rebuilding sentences from model word labels dropped commas and periods.
+
+`mapTranscriptDisplay` now maps normalized lexical characters from model words back to exact source ranges. The visible strings come from source slices, preserving punctuation, whitespace, case, apostrophes, abbreviations, newlines, and bilingual quotation marks. Trailing punctuation may share the preceding word's visual span, but gets no independent timestamp. Original word objects and times are never mutated. This preserves source punctuation; it is not ASR-generated punctuation.
+
+Matching is conservative and checks the complete normalized lexical sequence. If it differs, the full source remains visible with a clear warning and no false clickable word mapping. Extra translation or edited words cannot silently acquire model timing.
 
 ## Verification
 
-Tests cover left/right transfer, width changes, bounded overshoot, convergence, interrupting an active spring, cross-line/seek behavior, reduced motion, one persistent pill, accessible word count, and exact click timestamps. Existing transcript editing, Markdown, and local Library tests remain in the suite. These are numerical and DOM tests; final perceptual animation review should be performed in the deployed browser preview.
+Tests measure 90% arrival time, exact settle time, zero overshoot, short-word deadlines, interruption position continuity, both directions, line changes, seeking, reduced motion, persistent pill identity, and unchanged click timestamps. Text tests cover spaces, contractions, abbreviations, accents, Chinese/English quotes, literal markup, and mismatch fallback. An edit → alignment-response test verifies punctuation remains visible. The private demo runtime separately compares displayed text against the actual API source verbatim.

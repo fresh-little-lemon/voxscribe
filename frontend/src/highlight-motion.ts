@@ -1,12 +1,12 @@
 export type HighlightRect={x:number;y:number;width:number;height:number};
 export type SpringAxis={value:number;velocity:number};
-/** A near-critically damped spring with restrained overshoot. New targets retain current position/velocity; no queue. */
-export function stepSpring(axis:SpringAxis,target:number,seconds:number):SpringAxis{let {value,velocity}=axis;const steps=Math.max(1,Math.ceil(Math.min(seconds,.04)/.006));const dt=Math.min(seconds,.04)/steps;for(let i=0;i<steps;i++){velocity+=(1000*(target-value)-56*velocity)*dt;value+=velocity*dt}if(Math.abs(target-value)<.04&&Math.abs(velocity)<.6)return {value:target,velocity:0};return {value,velocity}}
+export function transferDuration(wordDuration:number){return Math.min(.09,Math.max(.012,wordDuration*.45))}
 export function transferKind(previous:HighlightRect|null,next:HighlightRect,previousIndex:number,nextIndex:number,seekChanged:boolean,reducedMotion:boolean):'snap'|'spring'|'row-hop'{if(!previous||seekChanged||reducedMotion)return 'snap';if(Math.abs(previousIndex-nextIndex)>2)return 'snap';if(Math.abs(previous.y-next.y)>Math.min(previous.height,next.height)*.45)return 'row-hop';if(Math.abs(previous.x-next.x)>320)return 'snap';return 'spring'}
+/** API name retained; finite monotone ease-out now gives each word a firm resting point. */
 export class HighlightSpring{
- x:SpringAxis; width:SpringAxis; target:HighlightRect; y:number;height:number;
- constructor(rect:HighlightRect){this.x={value:rect.x,velocity:0};this.width={value:rect.width,velocity:0};this.target=rect;this.y=rect.y;this.height=rect.height}
- retarget(rect:HighlightRect,snap=false){this.target=rect;this.y=rect.y;this.height=rect.height;if(snap){this.x={value:rect.x,velocity:0};this.width={value:rect.width,velocity:0}}}
- step(seconds:number){this.x=stepSpring(this.x,this.target.x,seconds);this.width=stepSpring(this.width,this.target.width,seconds);return {x:this.x.value,y:this.y,width:Math.max(1,this.width.value),height:this.height}}
- get settled(){return this.x.velocity===0&&this.width.velocity===0&&this.x.value===this.target.x&&this.width.value===this.target.width}
+ x:SpringAxis;width:SpringAxis;target:HighlightRect;y:number;height:number;private fromX=0;private fromWidth=0;private slopeX=0;private slopeWidth=0;private elapsed=0;private duration=.09;
+ constructor(rect:HighlightRect){this.x={value:rect.x,velocity:0};this.width={value:rect.width,velocity:0};this.target=rect;this.y=rect.y;this.height=rect.height;this.elapsed=this.duration}
+ retarget(rect:HighlightRect,snap=false,duration=.09){this.duration=Math.max(.001,duration);this.fromX=this.x.value;this.fromWidth=this.width.value;const slope=(axis:SpringAxis,target:number)=>{const delta=target-axis.value;if(!delta)return 0;const carried=axis.velocity*this.duration/delta;return delta*Math.min(3,Math.max(0,carried||3))};this.slopeX=slope(this.x,rect.x);this.slopeWidth=slope(this.width,rect.width);this.target=rect;this.y=rect.y;this.height=rect.height;this.elapsed=0;if(snap){this.x={value:rect.x,velocity:0};this.width={value:rect.width,velocity:0};this.elapsed=this.duration}}
+ step(seconds:number){this.elapsed=Math.min(this.duration,this.elapsed+Math.max(0,seconds));const t=this.elapsed/this.duration;const interpolate=(from:number,target:number,slope:number):SpringAxis=>{if(t>=1)return {value:target,velocity:0};const delta=target-from;const value=from+(-2*t*t*t+3*t*t)*delta+(t*t*t-2*t*t+t)*slope;const velocity=((-6*t*t+6*t)*delta+(3*t*t-4*t+1)*slope)/this.duration;return {value,velocity}};this.x=interpolate(this.fromX,this.target.x,this.slopeX);this.width=interpolate(this.fromWidth,this.target.width,this.slopeWidth);return {x:this.x.value,y:this.y,width:Math.max(1,this.width.value),height:this.height}}
+ get settled(){return this.elapsed>=this.duration}
 }
