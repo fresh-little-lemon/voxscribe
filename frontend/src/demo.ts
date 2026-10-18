@@ -1,0 +1,12 @@
+export type Word = {text:string;start:number;end:number};
+export type Segment = {id:string;speaker:string;text:string;start:number;end:number;words:Word[];stale?:boolean};
+const content = [
+[1,44,"Welcome to the VoxScribe workspace. Today we are exploring how a transcript can stay connected to the original recording. Each word on this page is part of a clearly labeled demonstration. Import your own audio or video, add the matching transcript, and run alignment to create real timestamps. You can then listen closely, move between paragraphs, and review the words in context. Good notes begin with a careful listening experience."],
+[44,64,"Let's start with a simple example."],
+[64,98,"A useful transcript is more than a page of text. It helps us return to a particular moment without listening to the entire recording again. Click a word to move the playhead, or use a paragraph timestamp to jump to the beginning of a thought. When the recording plays, the current word follows along. The sample timestamps shown here are illustrative and have not been aligned to a recording."],
+[98,144,"Editing is an important part of the workflow. A name may need correcting, a sentence may need another listen, or the transcript may be missing a phrase. After an edit, the old timing is marked as stale. Realignment creates a new set of timestamps from the media and the revised text. Always listen back to check the result, because forced alignment cannot prove that every written word was actually spoken."],
+[144,200,"Your media stays in your browser until you explicitly request alignment. At that point the file is sent to your configured alignment service. This workspace uses one media player as the source of truth for playback and word navigation."],
+[200,264,"When you are ready, export the transcript together with its timestamps for later review. Keep the original recording, the edited text, and the alignment result together so that changes remain easy to understand."]
+] as const;
+export const demoSegments:Segment[] = content.map(([start,end,text],i)=>{const tokens=text.split(' ');return {id:String(i+1),speaker:'说话人 1',start,end,text,words:tokens.map((text,j)=>({text,start:start+j*(end-start)/tokens.length,end:start+(j+1)*(end-start)/tokens.length}))}});
+export function clock(t:number){if(!Number.isFinite(t))return '00:00';return `${Math.floor(t/60).toString().padStart(2,'0')}:${Math.floor(t%60).toString().padStart(2,'0')}`;}
