@@ -73,7 +73,7 @@ class Aligner:
         with self.lock:
             for s in segments:
                 # Segment anchors are approximate. Add 0.5 s context, retaining absolute offsets.
-                start, end = max(0, s['start']-.5), s['end']+.5
+                start, end = (s['start'], s['end']) if s.get('scoped') else (max(0, s['start']-.5), s['end']+.5)
                 audio = decode_window(path, start, end)
                 words, elapsed = self.align_audio(audio, s['text'], language, start)
                 warnings = boundary_warnings(words, start, start+len(audio)/16000)

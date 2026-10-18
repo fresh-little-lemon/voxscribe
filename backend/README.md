@@ -36,3 +36,32 @@ Uploaded files are temporary and deleted after processing or failure. Audio is n
 ## Tests and experiment
 
 `python -m pytest backend/tests -q` tests contract validation and error handling (contract tests use explicitly labeled doubles). Real-model measurements are in `experiments/results-metadata.json` and `experiments/README.md`. Private audio/text are excluded.
+
+### Incremental sentence-local edits
+
+The frontend reuses exact existing word timestamps for unambiguous complete-word
+removals and punctuation-only edits, without calling the model. Removed audio is
+left as a timing gap. Insertions, replacements, and within-word edits submit only
+the changed region plus at most one unchanged neighboring word on each side,
+within the same sentence, with 150 ms of audio padding. Such `/api/align` segments
+set `scoped: true`; the backend must not add its usual 500 ms padding again.
+Model results are spliced only into the edited region and rejected if they cross
+unchanged timing anchors, mismatch the requested text, or belong to an obsolete
+audio/text revision. No timings are interpolated or clamped.
+
+Current limitations: save changes one sentence at a time. A change spanning
+multiple sentences is blocked rather than expanded to an entire paragraph.
+Deleting repeated words or phrases with more than one possible surviving word
+mapping is also blocked for review rather than silently choosing an occurrence.
+These cases do not fall back to full-paragraph realignment.
+
+A private, cached-model CPU smoke test exercised the actual scoped endpoint on an
+8.22-second sentence window: HTTP 200, 20 word timings, all within the exact
+requested bounds, and no additional backend window expansion. End-to-end elapsed
+time was 9.69 seconds (including 2.24 seconds model loading), using two CPU
+threads with network model downloads disabled. A separate edit on an existing
+124-word result removed two unambiguous complete words with zero alignment jobs;
+all 122 surviving timestamp pairs and word objects remained exactly identical.
+Public numerical results are in `experiments/incremental-metrics.json`; audio,
+transcript text, request bodies, and full responses remain private. These checks
+establish scoping and timestamp preservation, not transcript correctness.

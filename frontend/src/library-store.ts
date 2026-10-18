@@ -1,6 +1,7 @@
+import type { EditPlan } from './incremental-alignment';
 import type { Segment } from './demo';
 export type ImportVersion={name:string;raw:string;version:number;mode:'all'|'english'|'chinese'};
-export type SavedDocument={segments:Segment[];importVersions:ImportVersion[];language:string;method:string};
+export type SavedDocument={segments:Segment[];importVersions:ImportVersion[];language:string;method:string;mediaIdentity?:string;incremental?:Record<string,{base:Segment;plan:EditPlan}>};
 export type LibraryFolder={id:string;name:string;parentId:string|null};
 export type LibraryItem={id:string;name:string;kind:'audio'|'video'|'document'|'demo';folderId:string|null;createdAt:string;updatedAt:string;deletedAt?:string;mediaStored?:boolean;mediaName?:string;document?:SavedDocument};
 export type LibraryData={version:1;folders:LibraryFolder[];items:LibraryItem[]};

@@ -82,6 +82,7 @@ aligner = Aligner()
 class Segment(BaseModel):
     id: str = Field(min_length=1,max_length=200)
     speaker: str = Field(default='',max_length=200)
+    scoped: bool = False
     text: str = Field(min_length=1,max_length=16000)
     start: float = Field(ge=0,allow_inf_nan=False)
     end: float = Field(gt=0,allow_inf_nan=False)

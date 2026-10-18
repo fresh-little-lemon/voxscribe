@@ -51,3 +51,13 @@ The private review package initially opens the Library, with a one-click real 75
 Current-word highlighting uses one interruptible, deadline-bounded background pill with fixed text geometry; no border/box-shadow animation. Neighboring words slide left/right with a short, monotone width change that lands firmly within 90ms (or 45% of a short word), while line breaks reveal in place and seeks/reduced-motion snap. See ../docs/highlight-motion.md for references and behavior. Playback reads the same media element on animation frames, preserving keyboard-only focus outlines. Skip controls use centered SVG numerals. Language and playback-rate popovers expose keyboard navigation, selection state, outside-click and Escape dismissal.
 
 Transcript editing stays in the paragraph itself. The top toolbar provides undo/redo, cancel, done, and an optional time-range popover. The contentEditable DOM is unmanaged during typing, so playback updates do not overwrite its content or selection. Composition input is committed only after IME completion; paste is plain text. Draft edits invalidate pending result revisions, while completing edits marks changed timing stale. Cancel restores the paragraph's pre-edit state. Behavioral coverage includes IME, playback rerender, undo/redo/cancel, repeated editing, menu dismissal, and skip-icon geometry.
+
+## 句级增量编辑与版本记录
+
+- 已有可信结构的逐词时间轴上，只改标点、大小写或无歧义整词删除，会直接保留原词时间，不调用模型。这里的“保留”不表示语音内容已核验。
+- 插入/替换只请求修改句子内的邻近小窗口（最多前后一个词及 150 ms 音频上下文），提交 `scoped: true`；模型返回值不平移、不插值、不夹紧。窗口外词对象及时间原样保留。
+- 跨句修改、歧义或无法安全复用的旧时间轴会提示检查，绝不静默扩大为整段重算。请逐句保存。新稿首次对齐仍需要真实锚点或先粗定位。
+- 局部计划和原已对齐基线随文稿保存；连续修改会对照基线重新计算。接收新的粗定位范围会清除对应旧计划。
+- 工具栏撤销/重做支持已经保存的文稿修改，文字、时间轴、注释、导入版本与局部计划一起恢复。编辑中可用 Ctrl/Cmd+Z、重做；保存不清除本次详情会话的撤销记录。重新打开文件可通过“更多 → 编辑历史”回滚持久化版本。
+- 编辑历史保存在此浏览器，支持内容/时间轴差异预览、回滚产生新版本。不同媒体的版本不能回滚。清除旧版本须明确确认，保留当前文稿和媒体；确认删除同时清空本次会话撤销/重做记录。
+- 编辑、时间范围调整、媒体替换、撤销/重做和历史回滚都会废弃尚未返回的旧对齐请求。静态预览没有运行模型；重新计算需启动本地后端。

@@ -1,0 +1,32 @@
+{
+  "status": 200,
+  "total_seconds": 9.692704478999076,
+  "load_seconds": 2.2377533560011216,
+  "decode_windows": [
+    [
+      38.41,
+      46.63
+    ]
+  ],
+  "requested_window": [
+    38.41,
+    46.63
+  ],
+  "word_count": 20,
+  "all_times_in_bounds": true,
+  "threads": 2,
+  "offline_cache_only": true,
+  "inference_seconds": 1.7358789599984448,
+  "alignment_status": "aligned",
+  "warning_count": 0,
+  "deletion": {
+    "kind": "preserved",
+    "model_calls": 0,
+    "job_count": 0,
+    "before_words": 124,
+    "after_words": 122,
+    "removed_words": 2,
+    "all_surviving_objects_identical": true,
+    "all_surviving_timestamps_bitexact": true
+  }
+}

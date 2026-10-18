@@ -38,3 +38,14 @@ def test_ffmpeg_rejects_playlist(tmp_path):
 def test_implausibly_long_word_warns():
     from backend.alignment import boundary_warnings
     assert any('two seconds' in s for s in boundary_warnings([{'text':'happens','start':0,'end':11.28}],0,15))
+
+def test_scoped_window_is_not_expanded(monkeypatch):
+    import backend.alignment as module
+    a=Aligner();seen=[]
+    def decode(path,start,end):
+        seen.append((start,end));return np.zeros(16000)
+    monkeypatch.setattr(module,'decode_window',decode)
+    monkeypatch.setattr(a,'align_audio',lambda audio,text,language,offset:([{'text':'edit','start':offset+.2,'end':offset+.4}],.01))
+    result=a.align_segments('x',[{'id':'local','text':'edit','start':10,'end':11,'scoped':True}])[0]
+    assert seen==[(10,11)]
+    assert result['words'][0]['start']==10.2
