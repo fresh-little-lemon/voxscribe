@@ -8,7 +8,7 @@ VoxScribe uses a small equivalent specialized to transcript words, rather than a
 
 ## Behavior
 
-- Same-line neighboring words: translate left or right and change width with a lightly underdamped spring (stiffness 1000, damping 44, unit mass)
+- Same-line neighboring words: translate left or right and change width with a near-critically damped spring (stiffness 1000, damping 56, unit mass; tested positional overshoot below 1%)
 - New target while moving: replace the target immediately while retaining current position and velocity; there is no animation queue
 - Adjacent words on different lines: reposition to the new line, with a brief 75ms reveal; never sweep diagonally across intervening text
 - Explicit seeking, distant word jumps, resize, or reduced-motion preference: position immediately at the current word
