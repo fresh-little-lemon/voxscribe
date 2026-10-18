@@ -1,0 +1,8 @@
+{
+  "purpose": "Independent ASR content cross-check only, never timing source",
+  "model": "Systran/faster-whisper-base.en",
+  "text": "Mr. Quilter is the apostle of the middle classes, and we are glad to welcome his gospel.",
+  "seconds": 1.2308785569985048,
+  "word_timestamps_requested": false,
+  "audio_external_upload": false
+}

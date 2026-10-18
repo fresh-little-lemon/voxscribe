@@ -1,0 +1,112 @@
+{
+  "revision": "public-model-reference_full",
+  "segments": [
+    {
+      "id": "public-speech",
+      "speaker": "LibriSpeech reader",
+      "scoped": true,
+      "text": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES AND WE ARE GLAD TO WELCOME HIS GOSPEL",
+      "start": 0.0,
+      "end": 5.855,
+      "words": [
+        {
+          "text": "MISTER",
+          "start": 0.56,
+          "end": 0.8
+        },
+        {
+          "text": "QUILTER",
+          "start": 0.8,
+          "end": 1.28
+        },
+        {
+          "text": "IS",
+          "start": 1.28,
+          "end": 1.44
+        },
+        {
+          "text": "THE",
+          "start": 1.44,
+          "end": 1.52
+        },
+        {
+          "text": "APOSTLE",
+          "start": 1.52,
+          "end": 2.08
+        },
+        {
+          "text": "OF",
+          "start": 2.08,
+          "end": 2.32
+        },
+        {
+          "text": "THE",
+          "start": 2.32,
+          "end": 2.32
+        },
+        {
+          "text": "MIDDLE",
+          "start": 2.32,
+          "end": 2.64
+        },
+        {
+          "text": "CLASSES",
+          "start": 2.64,
+          "end": 3.28
+        },
+        {
+          "text": "AND",
+          "start": 3.36,
+          "end": 3.52
+        },
+        {
+          "text": "WE",
+          "start": 3.52,
+          "end": 3.6
+        },
+        {
+          "text": "ARE",
+          "start": 3.6,
+          "end": 3.68
+        },
+        {
+          "text": "GLAD",
+          "start": 3.68,
+          "end": 4.08
+        },
+        {
+          "text": "TO",
+          "start": 4.08,
+          "end": 4.16
+        },
+        {
+          "text": "WELCOME",
+          "start": 4.16,
+          "end": 4.64
+        },
+        {
+          "text": "HIS",
+          "start": 4.64,
+          "end": 4.8
+        },
+        {
+          "text": "GOSPEL",
+          "start": 4.8,
+          "end": 5.44
+        }
+      ],
+      "textHash": "9ed9a726f8b973252de284bf878668198435473d4af80795424178eff5e7fb48",
+      "alignmentStatus": "review",
+      "verified": false,
+      "warnings": [
+        "One or more words have near-zero duration; text/audio mismatch is possible"
+      ],
+      "inferenceSeconds": 0.9682331479998538
+    }
+  ],
+  "method": "Qwen3-ForcedAligner-0.6B-hf",
+  "modelRevision": "c07281df297b9905d24a508279258cccf987a064",
+  "warnings": [
+    "Forced alignment assumes supplied text was spoken; timestamps do not verify transcript truth. Listen to edited passages."
+  ]
+}

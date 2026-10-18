@@ -1,0 +1,289 @@
+{
+  "recorded_at_utc": "2026-10-18T16:47:19Z",
+  "test_type": "real local CPU model via production FastAPI TestClient; not browser or deployed service",
+  "model": "Qwen/Qwen3-ForcedAligner-0.6B-hf",
+  "model_revision": "c07281df297b9905d24a508279258cccf987a064",
+  "model_load_seconds": 1.1343601029984711,
+  "total_prepare_seconds": 5.359836668998469,
+  "python": "3.12.14",
+  "packages": {
+    "torch": "2.14.1+cpu",
+    "transformers": "5.20.1",
+    "accelerate": "1.15.0",
+    "fastapi": "0.146.0",
+    "soundfile": "0.14.0",
+    "librosa": "1.0.0"
+  },
+  "inference_network_disabled": true,
+  "audio_sent_to_external_service": false,
+  "audio": {
+    "file": "librispeech_mr_quilter.wav",
+    "sha256": "799f78ed4beb4de7ceae3a809262d4ce242394342ccd1d58cef7d49dbc2def46",
+    "duration": 5.855,
+    "source": "https://huggingface.co/datasets/bezzam/audio_samples/resolve/main/librispeech_mr_quilter.wav",
+    "official_model_example": "https://huggingface.co/Qwen/Qwen3-ForcedAligner-0.6B-hf",
+    "original_sample_id": "LibriSpeech dev-clean 1272-128104-0000",
+    "transcript_source": "https://huggingface.co/datasets/hf-internal-testing/librispeech_asr_demo/viewer",
+    "original_corpus_license": "CC BY 4.0",
+    "license_source": "https://www.openslr.org/12",
+    "attribution": "LibriSpeech corpus: Vassil Panayotov, Guoguo Chen, Daniel Povey, Sanjeev Khudanpur; derived from LibriVox audiobooks",
+    "transcript": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES AND WE ARE GLAD TO WELCOME HIS GOSPEL"
+  },
+  "cases": [
+    {
+      "case": "reference_full",
+      "status": 200,
+      "api_seconds": 1.0645250189991202,
+      "model_load_included": false,
+      "request_segments": [
+        {
+          "id": "public-speech",
+          "text": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES AND WE ARE GLAD TO WELCOME HIS GOSPEL",
+          "start": 0,
+          "end": 5.855,
+          "speaker": "LibriSpeech reader",
+          "scoped": true
+        }
+      ],
+      "revision_preserved": true,
+      "segments": [
+        {
+          "word_count": 17,
+          "starts_monotonic": true,
+          "ends_monotonic": true,
+          "nonoverlap": true,
+          "strictly_inside_audio": true,
+          "zero_duration_words": [
+            {
+              "text": "THE",
+              "start": 2.32,
+              "end": 2.32
+            }
+          ],
+          "near_zero_duration_count": 1,
+          "id": "public-speech",
+          "inference_seconds": 0.9682331479998538,
+          "alignment_status": "review",
+          "verified": false,
+          "warnings": [
+            "One or more words have near-zero duration; text/audio mismatch is possible"
+          ]
+        }
+      ]
+    },
+    {
+      "case": "initial_omitted_middle",
+      "status": 200,
+      "api_seconds": 0.8236829749985191,
+      "model_load_included": false,
+      "request_segments": [
+        {
+          "id": "public-speech",
+          "text": "MISTER QUILTER IS THE APOSTLE OF THE CLASSES AND WE ARE GLAD TO WELCOME HIS GOSPEL",
+          "start": 0,
+          "end": 5.855,
+          "speaker": "LibriSpeech reader",
+          "scoped": true
+        }
+      ],
+      "revision_preserved": true,
+      "segments": [
+        {
+          "word_count": 16,
+          "starts_monotonic": true,
+          "ends_monotonic": true,
+          "nonoverlap": true,
+          "strictly_inside_audio": true,
+          "zero_duration_words": [
+            {
+              "text": "THE",
+              "start": 2.32,
+              "end": 2.32
+            }
+          ],
+          "near_zero_duration_count": 1,
+          "id": "public-speech",
+          "inference_seconds": 0.7514347200012708,
+          "alignment_status": "review",
+          "verified": false,
+          "warnings": [
+            "One or more words have near-zero duration; text/audio mismatch is possible"
+          ]
+        }
+      ]
+    },
+    {
+      "case": "initial_omitted_clause",
+      "status": 200,
+      "api_seconds": 0.724722112998279,
+      "model_load_included": false,
+      "request_segments": [
+        {
+          "id": "public-speech",
+          "text": "MISTER QUILTER IS THE APOSTLE OF TO WELCOME HIS GOSPEL",
+          "start": 0,
+          "end": 5.855,
+          "speaker": "LibriSpeech reader",
+          "scoped": true
+        }
+      ],
+      "revision_preserved": true,
+      "segments": [
+        {
+          "word_count": 10,
+          "starts_monotonic": true,
+          "ends_monotonic": true,
+          "nonoverlap": true,
+          "strictly_inside_audio": true,
+          "zero_duration_words": [
+            {
+              "text": "TO",
+              "start": 2.32,
+              "end": 2.32
+            }
+          ],
+          "near_zero_duration_count": 1,
+          "id": "public-speech",
+          "inference_seconds": 0.6532127649988979,
+          "alignment_status": "review",
+          "verified": false,
+          "warnings": [
+            "One or more words have near-zero duration; text/audio mismatch is possible"
+          ]
+        }
+      ]
+    },
+    {
+      "case": "initial_omitted_tail",
+      "status": 200,
+      "api_seconds": 0.7404662449989701,
+      "model_load_included": false,
+      "request_segments": [
+        {
+          "id": "public-speech",
+          "text": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES",
+          "start": 0,
+          "end": 5.855,
+          "speaker": "LibriSpeech reader",
+          "scoped": true
+        }
+      ],
+      "revision_preserved": true,
+      "segments": [
+        {
+          "word_count": 9,
+          "starts_monotonic": true,
+          "ends_monotonic": true,
+          "nonoverlap": true,
+          "strictly_inside_audio": true,
+          "zero_duration_words": [
+            {
+              "text": "THE",
+              "start": 2.32,
+              "end": 2.32
+            }
+          ],
+          "near_zero_duration_count": 1,
+          "id": "public-speech",
+          "inference_seconds": 0.6586102069995832,
+          "alignment_status": "review",
+          "verified": false,
+          "warnings": [
+            "One or more words have near-zero duration; text/audio mismatch is possible"
+          ]
+        }
+      ]
+    },
+    {
+      "case": "negative_unspoken",
+      "status": 200,
+      "api_seconds": 0.9492253710013756,
+      "model_load_included": false,
+      "request_segments": [
+        {
+          "id": "public-speech",
+          "text": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES PURPLE ELEPHANTS DANCE ON THE MOON AND WE ARE GLAD TO WELCOME HIS GOSPEL",
+          "start": 0,
+          "end": 5.855,
+          "speaker": "LibriSpeech reader",
+          "scoped": true
+        }
+      ],
+      "revision_preserved": true,
+      "segments": [
+        {
+          "word_count": 23,
+          "starts_monotonic": true,
+          "ends_monotonic": true,
+          "nonoverlap": true,
+          "strictly_inside_audio": true,
+          "zero_duration_words": [
+            {
+              "text": "THE",
+              "start": 2.32,
+              "end": 2.32
+            },
+            {
+              "text": "THE",
+              "start": 4.64,
+              "end": 4.64
+            },
+            {
+              "text": "MOON",
+              "start": 4.64,
+              "end": 4.64
+            },
+            {
+              "text": "AND",
+              "start": 4.64,
+              "end": 4.64
+            },
+            {
+              "text": "WE",
+              "start": 4.64,
+              "end": 4.64
+            },
+            {
+              "text": "ARE",
+              "start": 4.64,
+              "end": 4.64
+            },
+            {
+              "text": "GLAD",
+              "start": 4.72,
+              "end": 4.72
+            },
+            {
+              "text": "WELCOME",
+              "start": 5.44,
+              "end": 5.44
+            },
+            {
+              "text": "HIS",
+              "start": 5.44,
+              "end": 5.44
+            },
+            {
+              "text": "GOSPEL",
+              "start": 5.44,
+              "end": 5.44
+            }
+          ],
+          "near_zero_duration_count": 10,
+          "id": "public-speech",
+          "inference_seconds": 0.876588641996932,
+          "alignment_status": "review",
+          "verified": false,
+          "warnings": [
+            "One or more words have near-zero duration; text/audio mismatch is possible"
+          ]
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Known public transcript is not a manually timestamp-labeled reference.",
+    "Monotonic/in-bounds model timings do not prove spoken-text agreement.",
+    "Single public English reader and short clip; no accent, language, diarization or long-recording accuracy claim."
+  ]
+}

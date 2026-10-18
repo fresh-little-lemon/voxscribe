@@ -1,0 +1,14 @@
+{
+  "status": "paused_for_user_cv_priority",
+  "first_real_api_batch_complete": true,
+  "all_five_http_200": true,
+  "production_code_modified": false,
+  "local_job_inference_complete": false,
+  "frontend_real_replay_complete": false,
+  "tail_window_bug_status": "source_inspection_only_not_reproduced_or_fixed",
+  "active_model_processes": false,
+  "package_installation_complete": true,
+  "pip_check": "No broken requirements found",
+  "baseline_commit": "cac18474c79bc7909418162ddbca196e8ffcefaf",
+  "future_resume": "Preserve frontend-before-report and run its real scoped jobs before considering the bounded tail-window fix."
+}

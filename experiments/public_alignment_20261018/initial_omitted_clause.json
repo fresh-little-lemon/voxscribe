@@ -1,0 +1,77 @@
+{
+  "revision": "public-model-initial_omitted_clause",
+  "segments": [
+    {
+      "id": "public-speech",
+      "speaker": "LibriSpeech reader",
+      "scoped": true,
+      "text": "MISTER QUILTER IS THE APOSTLE OF TO WELCOME HIS GOSPEL",
+      "start": 0.0,
+      "end": 5.855,
+      "words": [
+        {
+          "text": "MISTER",
+          "start": 0.56,
+          "end": 0.8
+        },
+        {
+          "text": "QUILTER",
+          "start": 0.8,
+          "end": 1.28
+        },
+        {
+          "text": "IS",
+          "start": 1.28,
+          "end": 1.44
+        },
+        {
+          "text": "THE",
+          "start": 1.44,
+          "end": 1.52
+        },
+        {
+          "text": "APOSTLE",
+          "start": 1.52,
+          "end": 2.08
+        },
+        {
+          "text": "OF",
+          "start": 2.08,
+          "end": 2.32
+        },
+        {
+          "text": "TO",
+          "start": 2.32,
+          "end": 2.32
+        },
+        {
+          "text": "WELCOME",
+          "start": 2.32,
+          "end": 2.56
+        },
+        {
+          "text": "HIS",
+          "start": 2.56,
+          "end": 3.28
+        },
+        {
+          "text": "GOSPEL",
+          "start": 3.36,
+          "end": 3.44
+        }
+      ],
+      "textHash": "524d7aea7a18db3eed2cc83868013e0ea068d4e47dea8f8532a571d89d144ba1",
+      "alignmentStatus": "review",
+      "verified": false,
+      "warnings": [
+        "One or more words have near-zero duration; text/audio mismatch is possible"
+      ],
+      "inferenceSeconds": 0.6532127649988979
+    }
+  ],
+  "method": "Qwen3-ForcedAligner-0.6B-hf",
+  "modelRevision": "c07281df297b9905d24a508279258cccf987a064",
+  "warnings": [
+    "Forced alignment assumes supplied text was spoken; timestamps do not verify transcript truth. Listen to edited passages."
+  ]
+}

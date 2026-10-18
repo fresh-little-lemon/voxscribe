@@ -1,0 +1,72 @@
+{
+  "revision": "public-model-initial_omitted_tail",
+  "segments": [
+    {
+      "id": "public-speech",
+      "speaker": "LibriSpeech reader",
+      "scoped": true,
+      "text": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES",
+      "start": 0.0,
+      "end": 5.855,
+      "words": [
+        {
+          "text": "MISTER",
+          "start": 0.56,
+          "end": 0.8
+        },
+        {
+          "text": "QUILTER",
+          "start": 0.8,
+          "end": 1.28
+        },
+        {
+          "text": "IS",
+          "start": 1.28,
+          "end": 1.44
+        },
+        {
+          "text": "THE",
+          "start": 1.44,
+          "end": 1.52
+        },
+        {
+          "text": "APOSTLE",
+          "start": 1.52,
+          "end": 2.08
+        },
+        {
+          "text": "OF",
+          "start": 2.08,
+          "end": 2.32
+        },
+        {
+          "text": "THE",
+          "start": 2.32,
+          "end": 2.32
+        },
+        {
+          "text": "MIDDLE",
+          "start": 2.32,
+          "end": 2.64
+        },
+        {
+          "text": "CLASSES",
+          "start": 2.64,
+          "end": 3.28
+        }
+      ],
+      "textHash": "a25e07cdd40411082c0d150c3bbdc6f4c0e9013558b24f43d5d0e6aeab164e3f",
+      "alignmentStatus": "review",
+      "verified": false,
+      "warnings": [
+        "One or more words have near-zero duration; text/audio mismatch is possible"
+      ],
+      "inferenceSeconds": 0.6586102069995832
+    }
+  ],
+  "method": "Qwen3-ForcedAligner-0.6B-hf",
+  "modelRevision": "c07281df297b9905d24a508279258cccf987a064",
+  "warnings": [
+    "Forced alignment assumes supplied text was spoken; timestamps do not verify transcript truth. Listen to edited passages."
+  ]
+}

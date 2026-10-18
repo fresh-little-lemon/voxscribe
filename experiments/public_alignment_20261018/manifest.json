@@ -1,0 +1,45 @@
+{
+  "duration": 5.855,
+  "mediaIdentity": "sha256:799f78ed4beb4de7ceae3a809262d4ce242394342ccd1d58cef7d49dbc2def46",
+  "audioPath": "../../../voxscribe-public-assets/librispeech_mr_quilter.wav",
+  "baseline": "reference_full.json",
+  "cases": [
+    {
+      "name": "delete_middle",
+      "kind": "deletion",
+      "text": "MISTER QUILTER IS THE APOSTLE OF THE CLASSES AND WE ARE GLAD TO WELCOME HIS GOSPEL",
+      "expectedPlan": "preserved"
+    },
+    {
+      "name": "local_restore_middle",
+      "kind": "omission_restoration",
+      "base": "initial_omitted_middle.json",
+      "text": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES AND WE ARE GLAD TO WELCOME HIS GOSPEL"
+    },
+    {
+      "name": "local_restore_clause",
+      "kind": "omission_restoration",
+      "base": "initial_omitted_clause.json",
+      "text": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES AND WE ARE GLAD TO WELCOME HIS GOSPEL"
+    },
+    {
+      "name": "local_restore_tail",
+      "kind": "omission_restoration",
+      "base": "initial_omitted_tail.json",
+      "text": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES AND WE ARE GLAD TO WELCOME HIS GOSPEL"
+    },
+    {
+      "name": "local_negative_unspoken",
+      "kind": "unspoken_insertion",
+      "text": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES PURPLE ELEPHANTS DANCE ON THE MOON AND WE ARE GLAD TO WELCOME HIS GOSPEL"
+    },
+    {
+      "name": "restore_two_sentences",
+      "kind": "multi_sentence",
+      "base": "initial_omitted_tail.json",
+      "text": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES. AND WE ARE GLAD. TO WELCOME HIS GOSPEL",
+      "expectedPlan": "blocked",
+      "expectedOutcome": "blocked"
+    }
+  ]
+}
