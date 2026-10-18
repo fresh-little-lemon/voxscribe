@@ -12,8 +12,10 @@ VoxScribe combines a media player, speaker-aware transcript and correction workf
 - Editable segments with explicit pending, aligned and review-required states
 - Real local forced alignment using the official Qwen3-ForcedAligner model
 - Version-aware updates so an old alignment result cannot overwrite a newer edit
+- Markdown import with language-aware bilingual handling and untimed paragraph localization
+- Browser-local folder management and media/document library
 
-The first UI and local alignment service are implemented. The frontend builds successfully; backend tests and a real 75-second recording experiment pass the documented checks. Browser visual QA and end-to-end browser/API operation remain to be verified. See `frontend/README.md`, `backend/README.md`, and `experiments/README.md` for exact supported behavior and measurements. Automatic transcription and speaker diarization are subsequent integrations, not functions of this first alignment prototype.
+The first UI and local alignment service are implemented. The frontend builds successfully; backend tests and a real 75-second recording experiment pass the documented checks. Browser visual QA and end-to-end browser/API operation remain to be verified. See `frontend/README.md`, `backend/README.md`, and `experiments/README.md` for exact supported behavior and measurements. An opt-in short-range ASR/localization path supports untimed Markdown for selected ranges up to 120 seconds. Full-recording asynchronous transcription and integrated speaker diarization remain subsequent work. The workspace now includes browser-local folders, media persistence and recoverable trash; it is not cloud-synchronized storage.
 
 ## Repository layout
 
