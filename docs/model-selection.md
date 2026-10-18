@@ -129,7 +129,7 @@ Model/license/deployment: https://huggingface.co/nvidia/Frame_VAD_Multilingual_M
 
 ## Next real-audio test, after Qwen smoke-test completion
 
-No second large model has been loaded for this research. Prepare one fixed test set with: Mandarin lecture, accented English lecture, Chinese/English code-switching, rapid speaker turns, overlapping speech, low-volume speech, noise/music, and a long recording with a returning speaker. Include a >8-speaker case as an explicit capacity stress test, not a promised supported use case.
+The formal NVIDIA model and Alibaba FSMN-VAD have now run locally on two 65-second excerpts and one continuous 260-second excerpt. See `../experiments/diarization/README.md` for pinned revisions, measured CPU time, memory and mask disagreements. These runs establish execution and output behavior; speaker and boundary accuracy have not been measured against human reference labels. Extend the test set with: Mandarin lecture, accented English lecture, Chinese/English code-switching, rapid speaker turns, overlapping speech, low-volume speech, noise/music, and a long recording with a returning speaker. Include a >8-speaker case as an explicit capacity stress test, not a promised supported use case.
 
 - VAD: missed speech, false alarms, clipped word starts/ends, short interjections and quiet speech. Compare at the same threshold-selection policy.
 - Diarization: DER components, speaker-count error, overlap-inclusive score and speaker consistency over time. Pin RTTM reference, collar, overlap policy, postprocessing, runtime and precision.

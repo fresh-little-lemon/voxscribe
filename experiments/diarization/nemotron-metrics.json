@@ -1,0 +1,52 @@
+{
+  "model": "nvidia/Nemotron-3-Diarization",
+  "revision": "f667ed73aee57d40cc39428eb768b4fd87a0a29e",
+  "runtime": {
+    "transformers": "5.20.1",
+    "torch": "2.14.1+cpu",
+    "device": "cpu",
+    "threads": 2,
+    "dtype": "torch.float32"
+  },
+  "load_and_download_seconds": 17.503378393001185,
+  "clips": [
+    {
+      "clip": 1,
+      "duration_seconds": 65.0,
+      "preprocessing_seconds": 0.060387028999684844,
+      "inference_seconds": 2.889018058000147,
+      "real_time_factor": 0.04444643166154072,
+      "segments": 30,
+      "speaker_channels": [
+        0,
+        1,
+        2
+      ],
+      "speech_seconds_summed_including_overlap": 49.879999999999995,
+      "logits_shape": [
+        1,
+        6501,
+        8
+      ],
+      "peak_process_rss_mb": 1019.234375
+    },
+    {
+      "clip": 2,
+      "duration_seconds": 65.0,
+      "preprocessing_seconds": 0.032507988000361365,
+      "inference_seconds": 2.7820610070011753,
+      "real_time_factor": 0.04280093856924885,
+      "segments": 14,
+      "speaker_channels": [
+        0
+      ],
+      "speech_seconds_summed_including_overlap": 22.260000000000005,
+      "logits_shape": [
+        1,
+        6501,
+        8
+      ],
+      "peak_process_rss_mb": 1040.390625
+    }
+  ]
+}

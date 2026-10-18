@@ -1,0 +1,25 @@
+{
+  "interpretation": "Model disagreement only. No human reference; not false-negative or false-positive measurements. Different default smoothing/padding can cause disagreement.",
+  "clips": [
+    {
+      "clip": 1,
+      "duration_seconds": 65,
+      "grid_seconds": 0.01,
+      "nemotron_union_seconds": 38.07,
+      "fsmn_union_seconds": 50.22,
+      "nemotron_only_seconds": 0.0,
+      "fsmn_only_seconds": 12.15,
+      "both_seconds": 38.07
+    },
+    {
+      "clip": 2,
+      "duration_seconds": 65,
+      "grid_seconds": 0.01,
+      "nemotron_union_seconds": 22.26,
+      "fsmn_union_seconds": 35.25,
+      "nemotron_only_seconds": 0.0,
+      "fsmn_only_seconds": 12.99,
+      "both_seconds": 22.26
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "model": "funasr/fsmn-vad",
+  "revision": "df20e6b30c653645fa4ff125cacfcabd1020a669",
+  "funasr": "1.4.16",
+  "torch": "2.14.1+cpu",
+  "device": "cpu",
+  "threads": 2,
+  "load_and_download_seconds": 3.046530329000234,
+  "clips": [
+    {
+      "clip": 1,
+      "duration_seconds": 65.0,
+      "inference_seconds": 0.2683771069987415,
+      "real_time_factor": 0.004128878569211408,
+      "segments": 3,
+      "speech_seconds": 50.22,
+      "peak_process_rss_mib": 667.96875
+    },
+    {
+      "clip": 2,
+      "duration_seconds": 65.0,
+      "inference_seconds": 0.27105806399958965,
+      "real_time_factor": 0.004170124061532148,
+      "segments": 5,
+      "speech_seconds": 35.25,
+      "peak_process_rss_mib": 677.90625
+    },
+    {
+      "clip": 3,
+      "duration_seconds": 260.0,
+      "inference_seconds": 1.0643464560016582,
+      "real_time_factor": 0.004093640215390993,
+      "segments": 16,
+      "speech_seconds": 90.08,
+      "peak_process_rss_mib": 728.61328125
+    }
+  ]
+}
